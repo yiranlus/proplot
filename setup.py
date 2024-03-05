@@ -14,7 +14,7 @@ if __name__ == '__main__':
         install_requires=install_requires,
         python_requires='>=3.6',
         packages=find_packages(),
-        version='1.0.0',
+        version='1.0.1',
         name='proplot',
         include_package_data=True,
     )
