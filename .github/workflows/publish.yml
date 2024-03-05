@@ -1,0 +1,49 @@
+name: Publish package to CRA-pypi
+
+on:
+  push:
+    tags:
+      - 'v*' # Only triggered with tagged releases, e.g. v0.1.1, v2022.03.0
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.ref }}  # Pulls the ref tag that triggered this run (i.e., v0.1.1 or something similar)
+          release_name: Release ${{ github.ref }}
+          body: |
+            Changes in this Release
+          draft: false
+          prerelease: false
+
+  deploy:
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Python 3.10
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.10"
+      - name: Create pypirc file
+        run: |
+          cat >$HOME/.pypirc <<EOL
+          [distutils]
+          index-servers = cra
+          [cra]
+          repository: https://mckinsey.jfrog.io/artifactory/api/pypi/cra-pypi
+          username: ${{ secrets.PYPI_USERNAME }}
+          password: ${{ secrets.PYPI_API_TOKEN }}
+          EOL
+      - name: Publish distribution to PyPI
+        run: |
+          python setup.py sdist upload -r cra
