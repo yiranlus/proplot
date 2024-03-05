@@ -8,7 +8,7 @@ if __name__ == '__main__':
         install_requires=['matplotlib>=3.0.0', 'numpy'],
         python_requires='>=3.6',
         packages=find_packages(),
-        version='1.0.3',
+        version='1.0.4',
         name='proplot',
         include_package_data=True,
     )
