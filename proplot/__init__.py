@@ -3,7 +3,7 @@
 A succinct matplotlib wrapper for making beautiful, publication-quality graphics.
 """
 name = 'proplot'
-__version__ = '1.0.2'
+__version__ = '1.0.3'
 
 # Import dependencies early to isolate import times
 from . import internals, externals, tests  # noqa: F401
