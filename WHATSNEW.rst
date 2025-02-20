@@ -27,11 +27,10 @@ submitting your own changes.
    versioning <https://semver.org>`__, we will not consider removing the deprecated
    syntax until the first major release (i.e., version 1.0.0).
 
-Version 1.0.0 (####-##-##)
+Version 1.0.5 (####-##-##)
 ==========================
 
-This will be published when more comprehensive testing is completed
-and stability is improved.
+* change `matplotlib.cm.register_cmap` to `matplotlib.colormaps.register`.
 
 Version 0.10.0 (2022-##-##)
 ===========================
