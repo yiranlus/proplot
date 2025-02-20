@@ -1,0 +1,4 @@
+include proplot/cmaps/*
+include proplot/colors/*
+include proplot/cycles/*
+include proplot/fonts/*
