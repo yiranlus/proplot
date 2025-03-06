@@ -2759,12 +2759,18 @@ def _init_cmap_database():
     """
     # WARNING: Skip over the matplotlib native duplicate entries
     # with suffixes '_r' and '_shifted'.
-    try:
-        database = mcm._gen_cmap_registry()
-        attr = '_cmap_registry'  # Need to set this for legacy support.
-    except AttributeError:  # older versions that don't have getter for registry.
-        attr = '_cmap_registry' if hasattr(mcm, '_cmap_registry') else 'cmap_d'
+    database = mcm._gen_cmap_registry()
+    # older versions that don't have getter for registry.
+    if hasattr(mcm, '_cmap_registry'):
+        attr = '_cmap_registry'
         database = getattr(mcm, attr)
+    elif hasattr(mcm, 'cmap_d'):
+        attr = 'cmap_d'
+        database = getattr(mcm, attr)
+    else:
+        attr = '_cmaps'
+        database = getattr(mpl.colormaps, attr)
+
     if mcm.get_cmap is not _get_cmap:
         mcm.get_cmap = _get_cmap
     if mpl.colormaps.register is not _register_cmap:
@@ -2775,7 +2781,11 @@ def _init_cmap_database():
             if key[-2:] != '_r' and key[-8:] != '_shifted'
         }
         database = ColormapDatabase(database)
-        setattr(mcm, attr, database)
+        # setattr(mcm, attr, database)
+        if attr == '_cmaps':
+            setattr(mpl.colormaps, attr, database)
+        else:
+            setattr(mcm, attr, database)
     return database
 
 

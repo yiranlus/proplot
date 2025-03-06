@@ -30,6 +30,7 @@ submitting your own changes.
 Version 1.0.5 (####-##-##)
 ==========================
 
+* Fix issues with `proplot.colors.ColormapDatabase`
 * change `matplotlib.cm.register_cmap` to `matplotlib.colormaps.register`.
 
 Version 0.10.0 (2022-##-##)
