@@ -8,6 +8,7 @@ import inspect
 import re
 from numbers import Integral
 
+import matplotlib as mpl
 import matplotlib.axes as maxes
 import matplotlib.axis as maxis
 import matplotlib.cm as mcm
@@ -1147,7 +1148,11 @@ class Axes(maxes.Axes):
             mappable, cax=cax, ticks=locator, format=formatter,
             drawedges=grid, extendfrac=extendfrac, **kwargs
         )
-        obj.minorlocator = minorlocator  # backwards compatibility
+
+        if minorlocator is not None:
+            obj.minorlocator = minorlocator  # backwards compatibility
+        else:
+            obj.minorlocator = mpl.ticker.NullLocator()
         obj.update_ticks = guides._update_ticks.__get__(obj)  # backwards compatible
         if minorlocator is not None:
             obj.update_ticks()
