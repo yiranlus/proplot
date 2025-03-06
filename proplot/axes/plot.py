@@ -2347,10 +2347,20 @@ class PlotAxes(base.Axes):
         parser = self._get_lines  # the _process_plot_var_args instance
         props = {}  # which keys to apply from property cycler
         for prop, key in cycle_manually.items():
-            if kwargs.get(key, None) is None and prop in parser._prop_keys:
+            if hasattr(parser, '_prop_keys'):
+                # old version of matplotlib
+                entry = parser._prop_keys
+            else:
+                entry = parser._cycler_items[parser._idx]
+            if kwargs.get(key, None) is None and prop in entry:
                 props[prop] = key
         if props:
-            dict_ = next(parser.prop_cycler)
+            if hasattr(parser, 'prop_cycler'):
+                # old version of matplotlib
+                dict_ = next(parser.prop_cycler)
+            else:
+                dict_ = parser._cycler_items[parser._idx]
+            parser._idx = (parser._idx + 1) % len(parser._cycler_items)
             for prop, key in props.items():
                 value = dict_[prop]
                 if key == 'c':  # special case: scatter() color must be converted to hex
